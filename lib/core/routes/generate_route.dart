@@ -1,9 +1,10 @@
 import 'package:ecommerece_app/core/components/route_constants.dart';
 import 'package:ecommerece_app/features/add_product/ui/add_product_screen.dart';
-import 'package:ecommerece_app/features/auth/login_screen.dart';
-import 'package:ecommerece_app/features/auth/signup_screen.dart';
+import 'package:ecommerece_app/features/auth/ui/login/login_screen.dart';
+import 'package:ecommerece_app/features/auth/ui/signup/signup_screen.dart';
 import 'package:ecommerece_app/features/category/ui/category_screen.dart';
 import 'package:ecommerece_app/features/home/domain/entities/products.dart';
+import 'package:ecommerece_app/features/home/ui/home_screen.dart';
 import 'package:ecommerece_app/features/products_details/ui/products_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,10 @@ Route onGenerateRoute(RouteSettings settings) {
       return materialRoute(
         const LoginScreen(),
       );
+    case RouteConstants.homeScreen:
+      return materialRoute(
+        const HomeScreen(),
+      );
     case RouteConstants.productsDetailsScreen:
       final args = settings.arguments as Products;
       return materialRoute(
@@ -36,6 +41,10 @@ Route onGenerateRoute(RouteSettings settings) {
         CategoryScreen(
           category: args,
         ),
+      );
+    case RouteConstants.addProductScreen:
+      return materialRoute(
+        const AddProductScreen(),
       );
     case RouteConstants.addProductScreen:
       return materialRoute(

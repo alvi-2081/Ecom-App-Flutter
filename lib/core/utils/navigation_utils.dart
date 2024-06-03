@@ -38,7 +38,6 @@ class NavigationUtil {
   static Future<dynamic> popAllAndPush(
     BuildContext context,
     String routeName, {
-    required String previousScreen,
     dynamic args,
   }) {
     return Navigator.pushNamedAndRemoveUntil(

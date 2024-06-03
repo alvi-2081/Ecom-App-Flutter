@@ -1,8 +1,7 @@
 import 'package:ecommerece_app/core/constants/color_constant.dart';
 import 'package:ecommerece_app/core/app_core.dart';
-import 'package:ecommerece_app/core/network/dio_client_network.dart';
 import 'package:ecommerece_app/core/routes/generate_route.dart';
-import 'package:ecommerece_app/features/home/ui/home_screen.dart';
+import 'package:ecommerece_app/features/splash/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -15,7 +14,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await initRepos();
-  getIt<DioClientNetwork>().initializeDioClientNetwork();
+
   runApp(const MultiBlocProviderWidget());
 }
 
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       onGenerateRoute: onGenerateRoute,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

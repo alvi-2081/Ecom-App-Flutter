@@ -7,10 +7,12 @@ class StringConstants {
   static const String price = 'Price';
   static const String description = 'Description';
   static const String forgetYourpassword = 'Forgot your password?';
+  static const String dontHaveAccount = 'Dont have Account? Signup';
   static const String alreadyHaveAccount = 'Already have an account?';
   static const String ecommerceApp = 'Ecommerce App';
   static const String addProduct = 'Add Product';
   static const String productAddedSuccessfully = 'Product Added Successfully';
   static const String productDeleteduccessfully =
       'Product Deleted Successfully';
+  static const String ecomApp = 'Ecomm \nApp';
 }

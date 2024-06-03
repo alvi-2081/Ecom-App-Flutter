@@ -69,38 +69,38 @@ class DioApiServices {
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       return response.data;
     } else {
-      throw _getExceptionForStatusCode(response.statusCode);
+      return _getExceptionForStatusCode(response);
     }
   }
 
   Future _handleError(DioException error) async {
     switch (error.type) {
-      case DioException.connectionTimeout:
-      case DioException.sendTimeout:
-      case DioException.receiveTimeout:
+      case DioExceptionType.badResponse:
+        return _getExceptionForStatusCode(
+            error.response ?? Response(requestOptions: RequestOptions()));
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
         throw NetworkException('Request timeout');
-      case DioException.requestCancelled:
+      case DioExceptionType.cancel:
         break;
-      case DioException.badResponse:
-        throw _getExceptionForStatusCode(error.response?.statusCode);
-      case DioException.connectionError:
+      case DioExceptionType.connectionError:
         throw Exception('Connection error');
       default:
-        throw Exception('Unhandle exception error');
+        throw Exception('Something went wrong');
     }
   }
 
-  Exception _getExceptionForStatusCode(int? statusCode) {
-    if (statusCode == null) {
-      return Exception('No status code provided');
+  _getExceptionForStatusCode(Response response) {
+    if (response.statusCode == null) {
+      throw Exception('No status code provided');
     }
-    if (statusCode >= 400 && statusCode < 500) {
-      return BadRequestException('Bad request (status code: $statusCode)');
-    } else if (statusCode >= 500) {
-      return ServerException(
-          'Internal server error (status code: $statusCode)');
+    if (response.statusCode! == 401 || response.statusCode! == 400) {
+      return response.data;
+    } else if (response.statusCode! >= 500) {
+      throw ServerException('Internal server error');
     } else {
-      return Exception('Unexpected status code: $statusCode');
+      throw Exception('Something went wrong');
     }
   }
 }

@@ -6,10 +6,12 @@ import 'package:ecommerece_app/core/components/text_component.dart';
 import 'package:ecommerece_app/core/constants/color_constant.dart';
 import 'package:ecommerece_app/core/constants/sizedbox_constants.dart';
 import 'package:ecommerece_app/core/constants/string_constants.dart';
-import 'package:ecommerece_app/core/utils/logger_util.dart';
+import 'package:ecommerece_app/core/network/dio_client_network.dart';
 import 'package:ecommerece_app/core/utils/navigation_utils.dart';
+import 'package:ecommerece_app/core/utils/sharedpreference_utils.dart';
 import 'package:ecommerece_app/features/home/domain/entities/products.dart';
 import 'package:ecommerece_app/features/home/ui/cubit/home_cubit.dart';
+import 'package:ecommerece_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -48,12 +50,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       future = future.then((data) {
         return Future.delayed(const Duration(milliseconds: 200), () {
           productTiles.add(ProductComponent(
-            product: products[i],
-            onDelete: () {
-              context.read<HomeCubit>().removeProduct(products[i]);
-              LoggerUtil.logs(i);
-            },
-          ));
+              product: products[i],
+              onDelete: () =>
+                  context.read<HomeCubit>().removeProduct(products[i])));
           productListKey.currentState?.insertItem(productTiles.length - 1);
         });
       });
@@ -92,6 +91,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             StringConstants.ecommerceApp,
             style: TextStyle(color: Colors.white),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  getIt<SharedPreferencesUtil>().removeValue('user');
+                  getIt<DioClientNetwork>().changeAuthBaseUrl();
+                  NavigationUtil.popAllAndPush(
+                      context, RouteConstants.loginScreen);
+                },
+                icon: const Icon(
+                  Icons.exit_to_app,
+                  color: Colors.white,
+                ))
+          ],
           backgroundColor: ColorConstants.main,
         ),
         body: BlocConsumer<HomeCubit, HomeState>(
@@ -104,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               if (productTiles.isEmpty) {
                 _addProducts(state.products);
               } else {
-                LoggerUtil.logs(state.products.first.toJson());
                 productListKey = GlobalKey<AnimatedListState>();
                 productTiles.clear();
                 productTiles = state.products
